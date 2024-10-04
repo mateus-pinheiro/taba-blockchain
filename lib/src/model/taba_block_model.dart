@@ -12,7 +12,7 @@ class TabaBlockModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'header': header,
+      'header': header.toJson(),
       'body': body.toJson(),
     };
   }

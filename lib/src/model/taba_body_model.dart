@@ -11,8 +11,14 @@ class TabaBodyModel {
   TabaBodyModel(this.needsApproval, this.projectId,
       {required this.transactions, this.approvers});
 
-  List<Map<String, dynamic>> toJson() {
-    return transactions.map((transaction) => transaction.toJson()).toList();
+  Map<String, dynamic> toJson() {
+    return {
+      "transactions":
+          transactions.map((transaction) => transaction.toJson()).toList(),
+      "projectId": projectId,
+      "needsApproval": needsApproval,
+      "approvers": approvers
+    };
   }
 
   bool isApproved(int totalInvolved) {

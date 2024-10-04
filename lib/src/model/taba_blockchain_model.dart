@@ -12,7 +12,7 @@ class TabaBlockchainModel {
 
   TabaBlockchainModel({int difficulty = 4}) {
     _difficulty = difficulty;
-    _createGenesisBlock();
+    // _createGenesisBlock();
   }
 
   String get proofOfWorkPrefix {
@@ -23,9 +23,9 @@ class TabaBlockchainModel {
     final block = TabaBlockModel(
       TabaHeaderModel(
         timestamp: DateTime.now().millisecondsSinceEpoch,
-        hash: _chain.isNotEmpty ? _chain.last.header.hash : '',
+        hash: '',
         nonce: 0,
-        prevHash: '',
+        prevHash: _chain.isNotEmpty ? _chain.last.header.hash : '',
       ),
       body: body,
     );

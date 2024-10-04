@@ -1,0 +1,8 @@
+{
+    "timestamp": "",
+    "userIdSource": "",
+    "from": "walletId",
+    "to": "projectId",
+    "amount": 100.10,
+    "digitalAssigned": "fromDigitalAssigned"
+}

@@ -9,6 +9,7 @@
         "transactions": [
             {
                 "timestamp": "",
+                "userIdSource": "",
                 "from": "walletId",
                 "to": "projectId",
                 "amount": 100.10,
@@ -37,13 +38,8 @@
             }
         ],
         "projectId": "hash",
-        "needsApproval": true,
-        "approvers": [
-            "userId",
-            "userId",
-            "userId",
-            "userId",
-            "userId"
-        ]
+        "needsApproval": false,
+        "approvers": [],
+        "state": "pending, mined or pushed"
     }
 }
