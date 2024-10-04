@@ -1,13 +1,8 @@
-# Whitepaper - Projeto Taba
-Fortalecendo os laços da sua comunidade por meio de blockchain
+# Whitepaper - Taba Project
+Strengthening the bonds within your community through blockchain
 
-Introdução
-O Taba é uma plataforma baseada em blockchain que visa fortalecer os laços sociais e econômicos da sua comunidade, vizinhança ou bairro. O projeto permite que cidadãos invistam diretamente em projetos locais, promovendo melhorias e tornando seu lugar onde vive mais autossustentável. Através de um sistema descentralizado, os membros da comunidade podem apoiar iniciativas pessoais e coletivas de forma segura e transparente, acompanhando todo o processo desde o investimento até a entrega.
-
-A server app built using [Shelf](https://pub.dev/packages/shelf),
-configured to enable running with [Docker](https://www.docker.com/).
-
-This sample code handles HTTP GET requests to `/` and `/echo/<message>`
+Introduction
+Taba is a blockchain-based platform designed to strengthen the social and economic ties within your community, neighborhood, or district. The project allows citizens to directly invest in local initiatives, fostering improvements and making the place where they live more self-sustainable. Through a decentralized system, community members can support personal and collective projects in a secure and transparent way, tracking the entire process from investment to completion.
 
 # Running the sample
 
