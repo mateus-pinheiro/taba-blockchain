@@ -1,0 +1,49 @@
+{
+    "header": {
+        "timestamp": "",
+        "nonce": 0,
+        "hash": "hash",
+        "prevHash": "hash"
+    },
+    "body": {
+        "transactions": [
+            {
+                "timestamp": "",
+                "from": "walletId",
+                "to": "projectId",
+                "amount": 100.10,
+                "digitalAssigned": "fromDigitalAssigned"
+            },
+            {
+                "timestamp": "",
+                "from": "walletId",
+                "to": "projectId",
+                "amount": 100.10,
+                "digitalAssigned": "fromDigitalAssigned"
+            },
+            {
+                "timestamp": "",
+                "from": "walletId",
+                "to": "projectId",
+                "amount": 100.10,
+                "digitalAssigned": "fromDigitalAssigned"
+            },
+            {
+                "timestamp": "",
+                "from": "walletId",
+                "to": "projectId",
+                "amount": 100.10,
+                "digitalAssigned": "fromDigitalAssigned"
+            }
+        ],
+        "projectId": "hash",
+        "needsApproval": true,
+        "approvers": [
+            "userId",
+            "userId",
+            "userId",
+            "userId",
+            "userId"
+        ]
+    }
+}

@@ -3,19 +3,34 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
+import '../lib/src/model/taba_blockchain_model.dart';
 
 // Configure routes.
 final _router = Router()
   ..get('/', _rootHandler)
-  ..get('/api/mine-block', _echoHandler);
+  ..get('/api/create-block', _mineBlock)
+  ..get('/api/mine-block', _mineBlock);
 
 Response _rootHandler(Request req) {
   return Response.ok('Hello, World!\n');
 }
 
-Response _echoHandler(Request request) {
-  final message = request.params['message'];
-  return Response.ok('$message\n');
+Response _mineBlock(Request request) {
+  try {
+    var tabaBlockchainModel = TabaBlockchainModel();
+    // createBlock();
+    // tabaBlockchainModel.mineBlock(block);
+    return Response.ok('');
+  } catch (e) {
+    return Response.badRequest();
+  }
+
+  // final message = request.params['message'];
+  // return Response.ok('$message\n');
+}
+
+void createBlock(TabaBlockchainModel blockchain, body) {
+  blockchain.createBlock(body);
 }
 
 void main(List<String> args) async {

@@ -1,7 +1,8 @@
 import 'taba_body_model.dart';
+import 'taba_header_model.dart';
 
 class TabaBlockModel {
-  late Map<String, dynamic> header;
+  late TabaHeaderModel header;
   late TabaBodyModel body;
 
   TabaBlockModel(

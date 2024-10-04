@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'taba_block_model.dart';
 import 'taba_body_model.dart';
 import 'taba_transaction_model.dart';
+import 'taba_header_model.dart';
 import 'package:crypto/crypto.dart';
 
 class TabaBlockchainModel {
@@ -11,7 +12,6 @@ class TabaBlockchainModel {
 
   TabaBlockchainModel({int difficulty = 4}) {
     _difficulty = difficulty;
-
     _createGenesisBlock();
   }
 
@@ -21,12 +21,12 @@ class TabaBlockchainModel {
 
   TabaBlockModel createBlock(TabaBodyModel body) {
     final block = TabaBlockModel(
-      {
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'nonce': 0,
-        'hash': '',
-        'prevHash': _chain.isNotEmpty ? _chain.last.header['hash'] : '',
-      },
+      TabaHeaderModel(
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+        hash: _chain.isNotEmpty ? _chain.last.header.hash : '',
+        nonce: 0,
+        prevHash: '',
+      ),
       body: body,
     );
 
@@ -38,11 +38,11 @@ class TabaBlockchainModel {
       final hash = _hash(block);
 
       if (hash.startsWith(proofOfWorkPrefix)) {
-        block.header['hash'] = hash;
+        block.header.hash = hash;
         return block;
       }
 
-      block.header['nonce']++;
+      block.header.nonce++;
     }
   }
 
@@ -60,7 +60,7 @@ class TabaBlockchainModel {
   void printChain() {
     for (var element in _chain) {
       print(
-          "-------------------- BLOCK hash: ${element.header['hash']} -------------------");
+          "-------------------- BLOCK hash: ${element.header.hash} -------------------");
       print(JsonEncoder().convert(element.toJson()));
       print("");
     }
@@ -68,16 +68,18 @@ class TabaBlockchainModel {
 
   void _createGenesisBlock() {
     final body = TabaBodyModel(
+      false,
+      "0",
       transactions: [TabaTransactionModel(from: '', to: 'teus', amount: 10000)],
     );
 
     final genesisBlock = TabaBlockModel(
-      {
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'nonce': 0,
-        'hash': '',
-        'prevHash': '',
-      },
+      TabaHeaderModel(
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+        hash: '',
+        nonce: 0,
+        prevHash: '',
+      ),
       body: body,
     );
 
@@ -89,9 +91,9 @@ class TabaBlockchainModel {
     var hashString = '';
 
     hashString += jsonEncode(block.body.toJson());
-    hashString += block.header['prevHash'].toString();
-    hashString += block.header['timestamp'].toString();
-    hashString += block.header['nonce'].toString();
+    hashString += block.header.prevHash.toString();
+    hashString += block.header.timestamp.toString();
+    hashString += block.header.nonce.toString();
 
     final hash = sha256.convert(utf8.encode(hashString)).toString();
     return hash;
