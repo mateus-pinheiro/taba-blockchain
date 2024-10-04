@@ -4,6 +4,11 @@ Strengthening the bonds within your community through blockchain
 Introduction
 Taba is a blockchain-based platform designed to strengthen the social and economic ties within your community, neighborhood, or district. The project allows citizens to directly invest in local initiatives, fostering improvements and making the place where they live more self-sustainable. Through a decentralized system, community members can support personal and collective projects in a secure and transparent way, tracking the entire process from investment to completion.
 
+App UI - Prototype
+
+<img width="858" alt="Captura de Tela 2024-10-04 às 14 53 02" src="https://github.com/user-attachments/assets/b671b4c7-1080-492d-b5dc-8a29cde889f7">
+
+
 # Running the sample
 
 ## Running with the Dart SDK
