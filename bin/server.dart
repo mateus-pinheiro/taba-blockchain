@@ -5,12 +5,16 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:taba_blockchain/src/common/firebase.dart';
+import 'package:taba_blockchain/src/controller/chain_controller.dart';
 import 'package:taba_blockchain/src/model/taba_block_model.dart';
 import 'package:taba_blockchain/src/model/taba_blockchain_model.dart';
 import 'package:taba_blockchain/src/model/taba_body_model.dart';
 import 'package:taba_blockchain/src/model/taba_header_model.dart';
 import 'package:taba_blockchain/src/model/taba_project_model.dart';
 import 'package:taba_blockchain/src/model/taba_transaction_model.dart';
+
+// Controllers
+ChainController _chainController = ChainController();
 
 // Configure routes.
 final _router = Router()
@@ -25,11 +29,11 @@ Response _rootHandler(Request req) {
   return Response.ok('Hello, World!\n');
 }
 
-Response _mineBlock(Request request) {
+Response _mineBlock(TabaBlockModel block) {
   try {
     var tabaBlockchainModel = TabaBlockchainModel();
     // createBlock();
-    // tabaBlockchainModel.mineBlock(block);
+
     return Response.ok('');
   } catch (e) {
     return Response.badRequest();
@@ -39,30 +43,24 @@ Response _mineBlock(Request request) {
   // return Response.ok('$message\n');
 }
 
-Future<TabaBlockModel> createBlock() async {
-  print("Create block inicializada");
-  var projectId = "fNq9Be6zp9WF4FbjCCwM";
-  var firebaseResponse =
-      await Firestore.instance.collection("projects").document(projectId).get();
+// Future<TabaBlockModel> createBlock() async {
+//   var projectId = "fNq9Be6zp9WF4FbjCCwM";
+//   var firebaseResponse =
+//       await Firestore.instance.collection("projects").document(projectId).get();
+//   var project = Project.fromMap(firebaseResponse.map);
+//   var transaction =
+//       TabaTransactionModel(from: "mateus", to: "julio", amount: 10);
+//   var header = TabaHeaderModel(
+//       timestamp: DateTime.now().millisecondsSinceEpoch,
+//       hash: '',
+//       prevHash: '',
+//       nonce: 0);
 
-  print(firebaseResponse.map);
-  var project = Project.fromMap(firebaseResponse.map);
-  print('Project $project');
+//   var body = TabaBodyModel(project.needsApproval, projectId,
+//       transactions: [transaction]);
 
-  var transaction =
-      TabaTransactionModel(from: "mateus", to: "julio", amount: 10);
-  var header = TabaHeaderModel(
-      timestamp: DateTime.now().millisecondsSinceEpoch,
-      hash: '',
-      prevHash: '',
-      nonce: 0);
-
-  var body = TabaBodyModel(project.needsApproval, projectId,
-      transactions: [transaction]);
-
-  
-  return TabaBlockModel(header, body: body);
-}
+//   return TabaBlockModel(header, body: body);
+// }
 
 void main(List<String> args) async {
   // Use any available host or container IP (usually `0.0.0.0`).
@@ -98,12 +96,19 @@ Future<Response> _createTransaction(Request req) async {
   // criar o bloco com status pending daquele projeto, caso o bloco ainda não exista
   // se o bloco para aquele projeto, já existir, simplesmente atualiza a lista com transação nova
 
-  // var projectId = req.body;
-  // var transaction = req.body;
   try {
-    print("Create transaction inicializada");
-    var block = await createBlock();
-    Firestore.instance.collection("chain").add(block.toJson());
+    // var projectId = req.body;
+    // var transaction = req.body;
+    
+    // var block = await _chainController.createTransaction(projectId, transaction);
+
+    // if (block.body.needsApproval) {
+      
+    //   Firestore.instance.collection("pending-blocks").add(block.toJson());
+    // } else {
+    //   _mineBlock(request);
+    // }
+
     return Response.ok("Transação criada");
   } catch (e) {
     return Response.badRequest(body: e.toString());
