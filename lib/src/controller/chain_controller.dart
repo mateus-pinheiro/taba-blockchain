@@ -1,5 +1,7 @@
-import 'package:firedart/firestore/firestore.dart';
-import 'package:firedart/firestore/models.dart';
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
+import 'package:taba_blockchain/src/common/blockchain.dart';
 import 'package:taba_blockchain/src/model/taba_block_model.dart';
 import 'package:taba_blockchain/src/model/taba_body_model.dart';
 import 'package:taba_blockchain/src/model/taba_header_model.dart';
@@ -10,12 +12,9 @@ import 'package:taba_blockchain/src/service/firebase_service.dart';
 class ChainController {
   final FirebaseService _firebaseService = FirebaseService();
 
-  void mineBlock(TabaBlockModel block) {}
-
   void createTransaction(
       String projectId, TabaTransactionModel transaction) async {
-    var projectFromService = await _getProject(projectId);
-    var project = TabaProjectModel.fromMap(projectFromService.map);
+    var project = await _getProject(projectId);
 
     // var transaction =
     //     TabaTransactionModel(from: "mateus", to: "julio", amount: 10);
@@ -34,9 +33,16 @@ class ChainController {
     if (block.body.needsApproval) {
       _createBlock(block);
     } else {
-      var blockMined = _mineBlock(block);
-      _pushBlock(block);
+      var blockMined = await _mineBlock(block);
+      if (blockMined != null) {
+        _pushBlock(blockMined);
+      }
     }
+  }
+
+  void approveTransaction(String userId, String blockDocumentId) {
+    // adicionar lista de users aprovados na lista de approvers
+    // tentar mineirar bloco
   }
 
   void _createBlock(TabaBlockModel block) async =>
@@ -45,10 +51,41 @@ class ChainController {
   void _pushBlock(TabaBlockModel block) async =>
       _firebaseService.pushBlock(block);
 
-  Future<Document> _getProject(String projectId) async =>
-      await _firebaseService.getProject(projectId);
+  void _getChain() => _firebaseService.getLastItemFromChain();
 
-  void _mineBlock(TabaBlockModel block) async {
-    
+  Future<TabaProjectModel> _getProject(String projectId) async {
+    var projectFromService = await _firebaseService.getProject(projectId);
+    return TabaProjectModel.fromMap(projectFromService.map);
+  }
+
+  Future<TabaBlockModel?> _mineBlock(TabaBlockModel block) async {
+    if (paymentApproved(block)) {
+      while (true) {
+        final hash = _hash(block);
+        if (hash.startsWith(proofOfWorkPrefix)) {
+          block.header.hash = hash;
+          // get last item from chain to fill previous hash
+          return block;
+        }
+
+        block.header.nonce++;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  bool paymentApproved(TabaBlockModel block) => block.body.isApproved();
+
+  String _hash(TabaBlockModel block) {
+    var hashString = '';
+
+    hashString += jsonEncode(block.body.toJson());
+    hashString += block.header.prevHash.toString();
+    hashString += block.header.timestamp.toString();
+    hashString += block.header.nonce.toString();
+
+    final hash = sha256.convert(utf8.encode(hashString)).toString();
+    return hash;
   }
 }

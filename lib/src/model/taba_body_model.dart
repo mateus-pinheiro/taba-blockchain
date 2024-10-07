@@ -21,9 +21,8 @@ class TabaBodyModel {
     };
   }
 
-  bool isApproved(int totalInvolved) {
-    return needsApproval
-        ? (approvers!.length / totalInvolved) >= kApprovalPercentage
-        : true;
-  }
+  bool isApproved() => needsApproval
+      ? (approvers!.length / transactions.toList().length) >=
+          kApprovalPercentage
+      : true;
 }
