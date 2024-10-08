@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:shelf/shelf.dart';
@@ -5,7 +6,7 @@ import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:taba_blockchain/src/common/firebase.dart';
 import 'package:taba_blockchain/src/controller/chain_controller.dart';
-import 'package:taba_blockchain/src/model/taba_transaction_model.dart';
+import 'package:taba_blockchain/src/dto/request_create_transaction_dto.dart';
 
 // Controllers
 ChainController _chainController = ChainController();
@@ -40,8 +41,12 @@ Response _rootHandler(Request req) {
 
 Future<Response> _createTransaction(Request req) async {
   try {
-    _chainController.createTransaction(
-        "projectId", TabaTransactionModel(from: "", to: "", amount: 10));
+    final body = await req.readAsString();
+    final requestJson = jsonDecode(body);
+    final requestCreateTransactionDto =
+        RequestCreateTransactionDto.fromJson(requestJson);
+
+    _chainController.createTransaction(requestCreateTransactionDto.projectId, requestCreateTransactionDto.transaction);
     return Response.ok("Transação criada");
   } catch (e) {
     return Response.badRequest(body: e.toString());

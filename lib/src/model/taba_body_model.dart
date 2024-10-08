@@ -11,6 +11,15 @@ class TabaBodyModel {
   TabaBodyModel(this.needsApproval, this.projectId,
       {required this.transactions, this.approvers});
 
+  factory TabaBodyModel.fromJson(Map<String, dynamic> json) {
+    return TabaBodyModel(
+      json["needsApproval"],
+      json["projectId"],
+      approvers: json["approvers"].toList(),
+      transactions: json["transactions"].toList(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "transactions":

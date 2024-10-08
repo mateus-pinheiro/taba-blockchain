@@ -12,25 +12,25 @@ class FirebaseService {
   void pushBlock(TabaBlockModel block) async =>
       await Firestore.instance.collection("chain").add(block.toJson());
 
-  Future<Page> getLastItemFromChain() async {
-    //TODO
-    throw Exception();
+  Future<Document?> getLastMainedBlock() async {
+    // Referência para a coleção
+    CollectionReference collection = Firestore.instance.collection('chain');
 
-  //   // Ordena pela data de criação (timestamp) em ordem decrescente e pega o primeiro
-  //   var querySnapshot = await Firestore.instance
-  //       .collection("chain")
-  //       .orderBy('createdAt',
-  //           descending: true) // Ordena do mais recente para o mais antigo
-  //       .limit(1) // Limita a busca a um documento
-  //       .get();
+    // Consulta ordenando pelo timestamp em ordem decrescente e limitando a 1 documento
+    var query = collection.orderBy('timestamp', descending: true).limit(1);
 
-  //   if (querySnapshot.docs.isNotEmpty) {
-  //     // Obtém o último documento (na verdade o primeiro do resultado decrescente)
-  //     DocumentSnapshot lastDocument = querySnapshot.docs.first;
-  //     Map<String, dynamic>? data = lastDocument.data() as Map<String, dynamic>?;
-  //     print("Último documento encontrado: ${data}");
-  //   } else {
-  //     print("Nenhum documento encontrado na coleção.");
-  //   }
+    // Executa a consulta
+    List<Document> documents = await query.get();
+
+    // Verifica se a consulta retornou algum documento
+    if (documents.isNotEmpty) {
+      // Obtém o primeiro (e único) documento da lista
+      Document lastDocument = documents.first;
+      // Acesse os dados do documento conforme necessário
+      return lastDocument;
+      // print('Último documento: ${lastDocument.data}');
+    } else {
+      return null;
+    }
   }
 }

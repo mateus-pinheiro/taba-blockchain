@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'taba_block_model.dart';
 import 'taba_body_model.dart';
-import 'taba_transaction_model.dart';
 import 'taba_header_model.dart';
 import 'package:crypto/crypto.dart';
 
@@ -66,26 +65,26 @@ class TabaBlockchainModel {
     }
   }
 
-  void _createGenesisBlock() {
-    final body = TabaBodyModel(
-      false,
-      "0",
-      transactions: [TabaTransactionModel(from: '', to: 'teus', amount: 10000)],
-    );
+  // void _createGenesisBlock() {
+  //   final body = TabaBodyModel(
+  //     false,
+  //     "0",
+  //     transactions: [TabaTransactionModel(from: '', to: 'teus', amount: 10000)],
+  //   );
 
-    final genesisBlock = TabaBlockModel(
-      TabaHeaderModel(
-        timestamp: DateTime.now().millisecondsSinceEpoch,
-        hash: '',
-        nonce: 0,
-        prevHash: '',
-      ),
-      body: body,
-    );
+  //   final genesisBlock = TabaBlockModel(
+  //     TabaHeaderModel(
+  //       timestamp: DateTime.now().millisecondsSinceEpoch,
+  //       hash: '',
+  //       nonce: 0,
+  //       prevHash: '',
+  //     ),
+  //     body: body,
+  //   );
 
-    final minedBlock = mineBlock(genesisBlock);
-    _chain.add(minedBlock);
-  }
+  //   final minedBlock = mineBlock(genesisBlock);
+  //   _chain.add(minedBlock);
+  // }
 
   String _hash(TabaBlockModel block) {
     var hashString = '';

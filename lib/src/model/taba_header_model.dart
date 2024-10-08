@@ -10,6 +10,14 @@ class TabaHeaderModel {
       required this.hash,
       required this.prevHash});
 
+  factory TabaHeaderModel.newEmpty() {
+    return TabaHeaderModel(
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+        hash: '',
+        prevHash: '',
+        nonce: 0);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "timestamp": timestamp,

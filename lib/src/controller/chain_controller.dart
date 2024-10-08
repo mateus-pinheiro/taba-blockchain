@@ -7,35 +7,32 @@ import 'package:taba_blockchain/src/model/taba_body_model.dart';
 import 'package:taba_blockchain/src/model/taba_header_model.dart';
 import 'package:taba_blockchain/src/model/taba_project_model.dart';
 import 'package:taba_blockchain/src/model/taba_transaction_model.dart';
-import 'package:taba_blockchain/src/service/firebase_service.dart';
+import 'package:taba_blockchain/src/repository/blockchain/taba_blockchain_repo.dart';
+import 'package:taba_blockchain/src/repository/blockchain/taba_blockchain_repo_interface.dart';
+import 'package:taba_blockchain/src/repository/project/project_repo.dart';
+import 'package:taba_blockchain/src/repository/project/project_repo_interface.dart';
 
 class ChainController {
-  final FirebaseService _firebaseService = FirebaseService();
+  final TabaBlockchainRepoInterface _blockRepo = TabaBlockRepo();
+  final ProjectRepoInterface _projectRepo = ProjectRepo();
 
   void createTransaction(
       String projectId, TabaTransactionModel transaction) async {
     var project = await _getProject(projectId);
+    var body = TabaBodyModel(
+      project.needsApproval,
+      projectId,
+      transactions: [transaction],
+    );
 
-    // var transaction =
-    //     TabaTransactionModel(from: "mateus", to: "julio", amount: 10);
-
-    var header = TabaHeaderModel(
-        timestamp: DateTime.now().millisecondsSinceEpoch,
-        hash: '',
-        prevHash: '',
-        nonce: 0);
-
-    var body = TabaBodyModel(project.needsApproval, projectId,
-        transactions: [transaction]);
-
-    var block = TabaBlockModel(header, body: body);
+    var block = TabaBlockModel(TabaHeaderModel.newEmpty(), body: body);
 
     if (block.body.needsApproval) {
-      _createBlock(block);
+      _blockRepo.createBlock(block);
     } else {
       var blockMined = await _mineBlock(block);
       if (blockMined != null) {
-        _pushBlock(blockMined);
+        _blockRepo.pushBlock(blockMined);
       }
     }
   }
@@ -45,16 +42,8 @@ class ChainController {
     // tentar mineirar bloco
   }
 
-  void _createBlock(TabaBlockModel block) async =>
-      _firebaseService.createBlock(block);
-
-  void _pushBlock(TabaBlockModel block) async =>
-      _firebaseService.pushBlock(block);
-
-  void _getChain() => _firebaseService.getLastItemFromChain();
-
   Future<TabaProjectModel> _getProject(String projectId) async {
-    var projectFromService = await _firebaseService.getProject(projectId);
+    var projectFromService = await _projectRepo.getProject(projectId);
     return TabaProjectModel.fromMap(projectFromService.map);
   }
 
@@ -65,6 +54,8 @@ class ChainController {
         if (hash.startsWith(proofOfWorkPrefix)) {
           block.header.hash = hash;
           // get last item from chain to fill previous hash
+          var json = await _blockRepo.getLastMinedBlock();
+          TabaBlockModel.fromJson(json);
           return block;
         }
 
