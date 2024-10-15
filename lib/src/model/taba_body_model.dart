@@ -15,8 +15,12 @@ class TabaBodyModel {
     return TabaBodyModel(
       json["needsApproval"],
       json["projectId"],
-      approvers: json["approvers"].toList(),
-      transactions: json["transactions"].toList(),
+      approvers: (json["approvers"] != null)
+          ? List<String>.from(json["approvers"])
+          : null,
+      transactions: (json["transactions"] as List<dynamic>)
+          .map((transaction) => TabaTransactionModel.fromJson(transaction))
+          .toList(),
     );
   }
 

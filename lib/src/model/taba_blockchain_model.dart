@@ -21,7 +21,7 @@ class TabaBlockchainModel {
   TabaBlockModel createBlock(TabaBodyModel body) {
     final block = TabaBlockModel(
       TabaHeaderModel(
-        timestamp: DateTime.now().millisecondsSinceEpoch,
+        timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
         hash: '',
         nonce: 0,
         prevHash: _chain.isNotEmpty ? _chain.last.header.hash : '',

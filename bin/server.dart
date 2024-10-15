@@ -53,9 +53,12 @@ Future<Response> _createTransaction(Request req) async {
   }
 }
 
-Response _approveTransaction(Request req) {
+Future<Response> _approveTransaction(Request req) async {
   try {
-    _chainController.approveTransaction("userId", "blockDocumentId");
+    final body = await req.readAsString();
+    final requestJson = jsonDecode(body);
+    
+    _chainController.approveTransaction(requestJson['userId'], requestJson['projectId']);
     return Response.ok("Transação aprovada");
   } catch (e) {
     return Response.badRequest(body: e.toString());

@@ -1,11 +1,11 @@
 class TabaTransactionModel {
-  final String timestamp;
+  final String? timestamp;
   final String from;
   final String userId;
   final int amount;
 
   TabaTransactionModel({
-    required this.timestamp,
+    this.timestamp,
     required this.from,
     required this.userId,
     required this.amount,
@@ -13,7 +13,7 @@ class TabaTransactionModel {
 
   factory TabaTransactionModel.fromJson(Map<String, dynamic> json) {
     return TabaTransactionModel(
-        timestamp: json["timestamp"],
+        timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
         from: json["from"],
         userId: json["userId"],
         amount: json["amount"]);
@@ -21,6 +21,7 @@ class TabaTransactionModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'timestamp': timestamp ?? DateTime.now().millisecondsSinceEpoch.toString(),
       'from': from,
       'userId': userId,
       'amount': amount,
