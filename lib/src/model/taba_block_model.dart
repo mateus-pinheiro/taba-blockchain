@@ -10,6 +10,11 @@ class TabaBlockModel {
     required this.body,
   });
 
+  factory TabaBlockModel.fromJson(Map<String, dynamic> json) {
+    return TabaBlockModel(TabaHeaderModel.fromJson(json['header']),
+        body: TabaBodyModel.fromJson(json['body']));
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'header': header.toJson(),

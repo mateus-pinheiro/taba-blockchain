@@ -11,6 +11,19 @@ class TabaBodyModel {
   TabaBodyModel(this.needsApproval, this.projectId,
       {required this.transactions, this.approvers});
 
+  factory TabaBodyModel.fromJson(Map<String, dynamic> json) {
+    return TabaBodyModel(
+      json["needsApproval"],
+      json["projectId"],
+      approvers: (json["approvers"] != null)
+          ? List<String>.from(json["approvers"])
+          : null,
+      transactions: (json["transactions"] as List<dynamic>)
+          .map((transaction) => TabaTransactionModel.fromJson(transaction))
+          .toList(),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "transactions":
@@ -21,9 +34,8 @@ class TabaBodyModel {
     };
   }
 
-  bool isApproved(int totalInvolved) {
-    return needsApproval
-        ? (approvers!.length / totalInvolved) >= kApprovalPercentage
-        : true;
-  }
+  bool isApproved() => needsApproval
+      ? (approvers!.length / transactions.toList().length) >=
+          kApprovalPercentage
+      : true;
 }
