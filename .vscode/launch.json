@@ -7,7 +7,8 @@
         {
             "name": "taba_blockchain",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "${workspaceFolder}/bin/server.dart",
         }
     ]
 }
